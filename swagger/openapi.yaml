@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Scheduling Group API
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /scheduling-groups:
+    post:
+      summary: Create scheduling group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchedulingGroupRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchedulingGroupResponse'
+
+components:
+  schemas:
+    SchedulingGroupRequest:
+      type: object
+      required:
+        - group_name
+        - status
+      properties:
+        group_name:
+          type: string
+          example: TS_Group_123
+        created_by:
+          type: string
+          example: automation
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+
+    SchedulingGroupResponse:
+      allOf:
+        - $ref: '#/components/schemas/SchedulingGroupRequest'
+        - type: object
+          properties:
+            id:
+              type: integer
+              example: 101

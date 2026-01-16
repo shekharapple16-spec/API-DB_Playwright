@@ -1,0 +1,15 @@
+{
+  "group_name": "DEFAULT_GROUP",
+  "created_by": "system",
+  "status": "ACTIVE",
+  "description": "Default scheduling group",
+  "priority": 1,
+  "schedule": {
+    "type": "DAILY",
+    "time": "10:00"
+  },
+  "notifications": {
+    "email": true,
+    "sms": false
+  }
+}

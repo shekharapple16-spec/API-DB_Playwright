@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strict": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@config/*": ["config/*"],
+      "@constants/*": ["constants/*"],
+      "@db/*": ["db/*"],
+      "@models/*": ["models/*"],
+      "@payloads/*": ["payloads/*"],
+      "@builders/*": ["payloads/builders/*"],
+      "@templates/*": ["payloads/templates/*"],
+      "@utils/*": ["utils/*"],
+      "@generated/*": ["src/generated/*"],
+      "@clients/*":["clients/*"]
+    },
+
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}
