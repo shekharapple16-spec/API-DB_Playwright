@@ -1,3 +1,36 @@
+/**
+ * Scheduling Group Request Builder
+ *
+ * This class implements the Builder Pattern for creating SchedulingGroupRequest payloads.
+ * It provides a fluent interface for constructing request objects with sensible defaults
+ * and validation, eliminating the need for manual JSON creation.
+ *
+ * Purpose:
+ * - Creates SchedulingGroupRequest payloads programmatically
+ * - Provides fluent method chaining for easy payload construction
+ * - Sets sensible defaults in the constructor
+ * - Validates required fields before building
+ * - Ensures type safety using generated TypeScript models
+ *
+ * Relationships:
+ * - Uses generated models from src/generated/models/
+ * - Called by test files in tests/ directory to create request payloads
+ * - Payloads are passed to API clients in clients/ directory
+ * - Replaces manual JSON files for request creation
+ * - Collaborates with API clients for sending requests
+ *
+ * Builder Pattern Benefits:
+ * - Method chaining for readable payload construction
+ * - Immutable construction (returns new instances)
+ * - Validation at build time
+ * - Default values reduce boilerplate
+ *
+ * Usage Example:
+ * const payload = new SchedulingGroupBuilder()
+ *   .withGroupName('Test Group')
+ *   .withStatus(SchedulingGroupRequestStatusEnum.ACTIVE)
+ *   .build();
+ */
 import { SchedulingGroupRequest, SchedulingGroupRequestStatusEnum } from '@generated/models';
 
 export class SchedulingGroupBuilder {
@@ -14,7 +47,7 @@ export class SchedulingGroupBuilder {
 
   withGroupName(name: string) {
     this.payload.groupName = name;
-   
+
     return this;
   }
 

@@ -1,4 +1,31 @@
 {
+  // Legacy JSON Template - NOT USED
+  //
+  // This file contains a legacy JSON template for scheduling group payloads.
+  // It is kept for reference but is not used in the current implementation.
+  //
+  // Purpose (Historical):
+  // - Provided a static JSON template for request payloads
+  // - Served as a starting point for manual payload creation
+  // - Demonstrated the structure of scheduling group data
+  //
+  // Current Status:
+  // - DEPRECATED: Replaced by SchedulingGroupBuilder pattern
+  // - NOT USED: Builders provide programmatic payload creation
+  // - KEPT: For reference and migration purposes only
+  //
+  // Relationships:
+  // - Located in payloads/templates/ directory
+  // - Replaced by payloads/builders/SchedulingGroupBuilder.ts
+  // - Contains fields that may not match current API schema
+  // - Should not be referenced in active code
+  //
+  // Migration:
+  // Use SchedulingGroupBuilder instead:
+  // const payload = new SchedulingGroupBuilder()
+  //   .withGroupName('My Group')
+  //   .withStatus(SchedulingGroupRequestStatusEnum.ACTIVE)
+  //   .build();
   "group_name": "DEFAULT_GROUP",
   "created_by": "system",
   "status": "ACTIVE",

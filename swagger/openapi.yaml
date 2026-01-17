@@ -1,3 +1,31 @@
+# OpenAPI Specification for Scheduling Group API
+#
+# This is the single source of truth for the API contract. It defines all endpoints,
+# request/response schemas, and validation rules for the scheduling group service.
+#
+# Purpose:
+# - Defines API endpoints and their specifications
+# - Serves as contract between frontend/backend/testers
+# - Auto-generates TypeScript models and API clients
+# - Enables consistent API documentation and validation
+#
+# Relationships:
+# - Used by OpenAPI Generator to create TypeScript code in src/generated/
+# - Referenced by API implementation (not in this repo)
+# - Drives the structure of builders, clients, and tests
+# - Should be updated when API changes are made
+#
+# Endpoints Defined:
+# - POST /scheduling-groups: Create a new scheduling group
+# - GET /scheduling-groups: Retrieve all scheduling groups
+#
+# Schemas:
+# - SchedulingGroupRequest: Request payload for creating groups
+# - SchedulingGroupResponse: Response payload with group data
+#
+# Generation Command:
+# npm run generate:scheduling
+
 openapi: 3.0.3
 info:
   title: Scheduling Group API

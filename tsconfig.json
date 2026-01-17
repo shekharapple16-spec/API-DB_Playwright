@@ -1,4 +1,26 @@
 {
+  // TypeScript Configuration for Playwright API Testing Framework
+  //
+  // This configuration enables TypeScript compilation with path aliases for clean imports
+  // and strict type checking throughout the API automation framework.
+  //
+  // Purpose:
+  // - Configures TypeScript compiler options for the project
+  // - Enables path aliases for cleaner import statements
+  // - Ensures strict type checking and modern JavaScript features
+  // - Supports module resolution for Node.js and ES modules
+  //
+  // Relationships:
+  // - Enables imports from generated/ directory with @generated/*
+  // - Supports builder imports with @builders/* and @payloads/*
+  // - Allows clean imports for config, constants, and utilities
+  // - Required for compiling all TypeScript files in the project
+  //
+  // Key Features:
+  // - Path Aliases: Short import paths (e.g., @clients/*)
+  // - Strict Mode: Comprehensive type checking
+  // - ES2022 Target: Modern JavaScript features
+  // - Module Resolution: Node.js style imports
   "compilerOptions": {
     "target": "ES2022",
     "module": "commonjs",
