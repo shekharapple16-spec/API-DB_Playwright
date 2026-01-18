@@ -31,16 +31,15 @@
  *   .withStatus(SchedulingGroupRequestStatusEnum.ACTIVE)
  *   .build();
  */
-import { SchedulingGroupRequest, SchedulingGroupRequestStatusEnum } from '@generated/models';
-
+import { CreateSchedulingGroupRequest } from '@generated/models';
 export class SchedulingGroupBuilder {
-  private payload: SchedulingGroupRequest;
+  private payload: CreateSchedulingGroupRequest;
 
   constructor() {
     this.payload = {
       groupName: '',
       createdBy: 'automation',
-      status: SchedulingGroupRequestStatusEnum.Active
+      status: 'Active'
     };
   }
 
@@ -56,12 +55,12 @@ export class SchedulingGroupBuilder {
     return this;
   }
 
-  withStatus(status: SchedulingGroupRequestStatusEnum) {
+  withStatus(status: string) {
     this.payload.status = status;
     return this;
   }
 
-  build(): SchedulingGroupRequest {
+  build(): CreateSchedulingGroupRequest {
     if (!this.payload.groupName) {
       throw new Error('groupName is mandatory');
     }

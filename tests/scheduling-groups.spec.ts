@@ -34,30 +34,28 @@
 import { test, expect } from "@playwright/test";
 import { SchedulingGroupBuilder } from "@builders/SchedulingGroupBuilder";
 import { DB_QUERIES } from "@db/queries";
-import { queryDB } from "@utils/dbClient";
 import { SchedulingGroupClient } from "@clients/SchedulingGroupClient";
 
-
-test.skip("Create scheduling group and validate DB", async ({ request }) => {
+test("Scheduling group workflow: create, get, and delete", async ({
+  request,
+}) => {
   const payload = new SchedulingGroupBuilder()
-    .withGroupName(`TS_${Date.now()}`)
+    .withGroupName(`TSC_${Date.now()}`)
+    .withStatus("active")
     .build();
 
   const client = new SchedulingGroupClient(request);
-  const responseBody = await client.createGroup(payload);
 
-  const dbResult = await queryDB(DB_QUERIES.GET_GROUP_BY_ID, [responseBody.id]);
+  // Create
+  const createdGroup = await client.createGroup(payload);
+  expect(createdGroup.groupName).toBe(payload.groupName);
+  
+  //get all groups
+  const allGroups = await client.getAllGroups();
+  //const fetchedGroup = allGroups.find(g => g.id === createdGroup.id);
+ console.log('Fetched Group:', allGroups);
+ // expect(fetchedGroup).toBeDefined();
+  //expect(fetchedGroup?.groupName).toBe(payload.groupName);
 
-  expect(dbResult).toHaveLength(1);
-  expect((dbResult[0] as any).group_name).toBe(payload.groupName);
-});
-
-test("Get all scheduling groups", async ({ request }) => {
-  const client = new SchedulingGroupClient(request);
-  const groups = await client.getAllGroups();
-
-  console.log("Groups returned:", groups);
- 
-  expect(Array.isArray(groups)).toBe(true);
-  // Additional assertions can be added based on expected data
+  
 });

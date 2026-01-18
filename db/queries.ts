@@ -21,8 +21,18 @@
  * - GET_GROUP_BY_ID: Retrieves a scheduling group by its ID
  *   Parameters: $1 (group ID)
  *   Returns: All columns from scheduling_groups table
+ * - GET_GROUPS_BY_STATUS: Retrieves all scheduling groups with specified status
+ *   Parameters: $1 (status: 'ACTIVE' or 'INACTIVE')
+ *   Returns: All columns from scheduling_groups table
+ * - DELETE_GROUPS_BY_STATUS: Deletes all scheduling groups with specified status
+ *   Parameters: $1 (status: 'ACTIVE' or 'INACTIVE')
+ *   Returns: Number of rows deleted
  */
 export const DB_QUERIES = {
   GET_GROUP_BY_ID:
-    'SELECT group_name FROM scheduling_groups WHERE id = $1'
+    'SELECT group_name FROM scheduling_groups WHERE id = $1',
+  GET_GROUPS_BY_STATUS:
+    'SELECT * FROM scheduling_groups WHERE status = $1',
+  DELETE_GROUPS_BY_STATUS:
+    'DELETE FROM scheduling_groups WHERE status = $1'
 };

@@ -17,7 +17,7 @@
  *
  * @abstract
  */
-import { APIRequestContext } from '@playwright/test';
+import { APIRequestContext } from "@playwright/test";
 
 export abstract class BaseApiClient {
   protected request: APIRequestContext;
@@ -26,3 +26,5 @@ export abstract class BaseApiClient {
     this.request = request;
   }
 }
+
+

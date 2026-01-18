@@ -3,7 +3,7 @@
  *
  * This class provides domain-specific methods for interacting with scheduling group endpoints.
  * It extends BaseApiClient to inherit the Playwright request context and implements
- * typed methods for creating and retrieving scheduling groups.
+ * typed methods for creating, retrieving, and deleting scheduling groups.
  *
  * Purpose:
  * - Encapsulates API calls related to scheduling groups
@@ -21,33 +21,59 @@
  * API Endpoints Handled:
  * - POST /scheduling-groups (createGroup)
  * - GET /scheduling-groups (getAllGroups)
+ * - DELETE /scheduling-groups/:id (deleteGroup)
+ * - DELETE /scheduling-groups/status/:status (deleteGroupsByStatus)
  */
 import { BaseApiClient } from "./BaseApiClient";
 import { ENDPOINTS } from "@constants/endpoint";
-import { SchedulingGroupRequest, SchedulingGroupResponse } from "@generated/models";
+import { CreateSchedulingGroupRequest, SchedulingGroup, DeleteByIdResponse, DeleteByStatusResponse, CreateSchedulingGroupRequestFromJSON, SchedulingGroupFromJSON, DeleteByIdResponseFromJSON, DeleteByStatusResponseFromJSON } from "@generated/models";
 
 export class SchedulingGroupClient extends BaseApiClient {
 
-  async createGroup(payload: SchedulingGroupRequest): Promise<SchedulingGroupResponse> {
+  async createGroup(payload: CreateSchedulingGroupRequest): Promise<SchedulingGroup> {
 
-    const response = await this.request.post(ENDPOINTS.SCHD_CREATE_GROUP, {
-      data: payload,
-    });
+    const response = await this.request.post(ENDPOINTS.SCHD_CREATE_GROUP, { data: payload });
 
     if (!response.ok()) {
       throw new Error(`Create group failed: ${response.status()}`);
     }
 
-    return await response.json();
+    const json = await response.json();
+    return SchedulingGroupFromJSON(json);
   }
 
-  async getAllGroups(): Promise<SchedulingGroupResponse[]> {
+  async getAllGroups(): Promise<SchedulingGroup[]> {
     const response = await this.request.get(ENDPOINTS.SCHD_GET_GROUPS);
 
     if (!response.ok()) {
       throw new Error(`Get groups failed: ${response.status()}`);
     }
 
-    return await response.json();
+    const json = await response.json();
+    return (json as any[]).map(SchedulingGroupFromJSON);
+  }
+
+  async deleteGroup(id: number): Promise<DeleteByIdResponse> {
+    const url = ENDPOINTS.SCHD_DELETE_GROUP.replace(':id', id.toString());
+    const response = await this.request.delete(url);
+
+    if (!response.ok()) {
+      throw new Error(`Delete group failed: ${response.status()}`);
+    }
+
+    const json = await response.json();
+    return DeleteByIdResponseFromJSON(json);
+  }
+
+  async deleteGroupsByStatus(status: string): Promise<DeleteByStatusResponse> {
+    const url = ENDPOINTS.SCHD_DELETE_GROUPS_BY_STATUS.replace(':status', status);
+    const response = await this.request.delete(url);
+
+    if (!response.ok()) {
+      throw new Error(`Delete groups by status failed: ${response.status()}`);
+    }
+
+    const json = await response.json();
+    return DeleteByStatusResponseFromJSON(json);
   }
 }

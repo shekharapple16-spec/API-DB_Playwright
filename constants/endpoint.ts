@@ -20,8 +20,12 @@
  * Endpoints Defined:
  * - CREATE_GROUP: POST endpoint for creating scheduling groups
  * - GET_GROUPS: GET endpoint for retrieving all scheduling groups
+ * - DELETE_GROUP: DELETE endpoint for deleting a scheduling group by ID
+ * - DELETE_GROUPS_BY_STATUS: DELETE endpoint for deleting groups by status
  */
 export const ENDPOINTS = {
   SCHD_CREATE_GROUP: '/scheduling-groups',
-  SCHD_GET_GROUPS: '/scheduling-groups'
+  SCHD_GET_GROUPS: '/scheduling-groups',
+  SCHD_DELETE_GROUP: '/scheduling-groups/:id',
+  SCHD_DELETE_GROUPS_BY_STATUS: '/scheduling-groups/status/:status'
 };
