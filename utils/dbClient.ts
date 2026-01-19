@@ -34,10 +34,7 @@ import { DB_CONFIG } from '../config/db.config';
 
 const pool = new Pool(DB_CONFIG);
 
-export async function queryDB<T extends QueryResultRow>(
-  query: string,
-  params: unknown[] = []
-): Promise<T[]> {
+export async function queryDB<T extends QueryResultRow>(query: string,params: unknown[] = []): Promise<T[]> {
   const client = await pool.connect();
   try {
     const result = await client.query<T>(query, params);
@@ -46,22 +43,4 @@ export async function queryDB<T extends QueryResultRow>(
     client.release();
   }
 }
-// export async function deleteDB(query: string, params: unknown[] = []): Promise<number> {
-//   const client = await pool.connect();
-//   try {
-//     const result = await client.query(query, params);
-//     return result.rowCount || 0;
-//   } finally {
-//     client.release();
-//   }
-// }
 
-// export async function deleteDB(query: string, params: unknown[] = []): Promise<number> {
-//   const client = await pool.connect();
-//   try {
-//     const result = await client.query(query, params);
-//     return result.rowCount || 0;
-//   } finally {
-//     client.release();
-//   }
-// }

@@ -35,7 +35,7 @@ import { test, expect } from "@playwright/test";
 import { SchedulingGroupBuilder } from "@builders/SchedulingGroupBuilder";
 import { DB_QUERIES } from "@db/queries";
 import { SchedulingGroupClient } from "@clients/SchedulingGroupClient";
-import { request } from "https";
+import { queryDB } from "@utils/dbClient";
 
 // craete a test to get all groups
 
@@ -45,29 +45,23 @@ test("Get all scheduling groups", async ({ request }) => {
 
   const builder = new SchedulingGroupBuilder();
   const payload = builder
-    .withGroupName(`TSCAUto_${Date.now()}`)
-    .withStatus("Inactive")
+    .withGroupName(`TSCAUto1_${Date.now()}`)
+    .withStatus("active")
     .build();
   const client = new SchedulingGroupClient(request);
 
   const createdGroup = await client.createGroup(payload);
-  expect(createdGroup.groupName).toBe(payload.groupName);
 
-  const groups = await client.getAllGroups();
+  // if group created successfuly it shoud return id
+  expect(createdGroup.id).toBeDefined();
+  console.log(createdGroup);
 
-  // Assert that the response is an array
-  expect(Array.isArray(groups)).toBe(true);
-
-  //print the groups
-  console.log("Scheduling Groups:", groups);
-});
+  // // now verify same in db
+  const dbGroups = await queryDB(DB_QUERIES.GET_GROUP_BY_ID, [createdGroup.id]);
+  expect(dbGroups.length).toBe(1);
+  console.log("DB Group:", dbGroups[0]);
 
 
-// test to delete groups by status
-test.skip("Delete scheduling groups by status", async ({ request }) => {
-  const client = new SchedulingGroupClient(request);
-  const statusToDelete = "active";
-  const deleteResponse = await client.deleteGroupsByStatus(statusToDelete);
- console.log("Delete Response:", deleteResponse);
-  expect(deleteResponse.message).toContain(`group(s) deleted`);
+  // const deleteResponse = await client.deleteGroup(createdGroup.id);
+  // console.log("Delete Response:", deleteResponse);
 });

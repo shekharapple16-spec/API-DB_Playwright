@@ -1,38 +1,6 @@
-/**
- * Database Query Constants
- *
- * This module contains all SQL queries used for database validation in tests.
- * Queries are parameterized to prevent SQL injection and are centralized here
- * for maintainability and consistency.
- *
- * Purpose:
- * - Defines SQL queries as string constants
- * - Uses parameterized queries for security
- * - Centralizes database query definitions
- * - Enables easy query management and updates
- *
- * Relationships:
- * - Used by utils/dbClient.ts for query execution
- * - Called by test files in tests/ directory for data validation
- * - Corresponds to database schema defined in PostgreSQL
- * - Works with database configuration from config/db.config.ts
- *
- * Queries Defined:
- * - GET_GROUP_BY_ID: Retrieves a scheduling group by its ID
- *   Parameters: $1 (group ID)
- *   Returns: All columns from scheduling_groups table
- * - GET_GROUPS_BY_STATUS: Retrieves all scheduling groups with specified status
- *   Parameters: $1 (status: 'ACTIVE' or 'INACTIVE')
- *   Returns: All columns from scheduling_groups table
- * - DELETE_GROUPS_BY_STATUS: Deletes all scheduling groups with specified status
- *   Parameters: $1 (status: 'ACTIVE' or 'INACTIVE')
- *   Returns: Number of rows deleted
- */
 export const DB_QUERIES = {
-  GET_GROUP_BY_ID:
-    'SELECT group_name FROM scheduling_groups WHERE id = $1',
-  GET_GROUPS_BY_STATUS:
-    'SELECT * FROM scheduling_groups WHERE status = $1',
-  DELETE_GROUPS_BY_STATUS:
-    'DELETE FROM scheduling_groups WHERE status = $1'
+  GET_GROUP_BY_ID: "SELECT group_name FROM scheduling_groups WHERE id = $1",
+  GET_GROUPS_BY_STATUS: "SELECT * FROM scheduling_groups WHERE status = $1",
+  DELETE_GROUPS_BY_STATUS: "DELETE FROM scheduling_groups WHERE status = $1",
+  GET_ALL_GROUPS: "SELECT * FROM scheduling_groups",
 };
