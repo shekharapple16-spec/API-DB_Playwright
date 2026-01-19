@@ -61,7 +61,12 @@ test("Get all scheduling groups", async ({ request }) => {
   expect(dbGroups.length).toBe(1);
   console.log("DB Group:", dbGroups[0]);
 
+//dekete whatever crarted by POSt and saved in db
+  const deleteResponse = await client.deleteGroup(createdGroup.id!);
+  console.log("Delete Response:", deleteResponse);
 
-  // const deleteResponse = await client.deleteGroup(createdGroup.id);
-  // console.log("Delete Response:", deleteResponse);
+  //check dleted post is wrkbg fine as data shoud not be avaible in db as well
+  const dbGroupsDeleted = await queryDB(DB_QUERIES.GET_GROUP_BY_ID, [createdGroup.id]);
+  expect(dbGroupsDeleted.length).toBe(0);
+
 });
