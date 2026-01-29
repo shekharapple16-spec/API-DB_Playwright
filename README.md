@@ -9,6 +9,7 @@ This project demonstrates API automation with Playwright, validating API → Dat
 - **Swagger-Driven Development**: Uses OpenAPI specification as the single source of truth
 - **Type Safety**: Full TypeScript support with auto-generated models
 - **Builder Pattern**: Programmatic payload creation without manual JSON files
+- docker run -d -p 3000:3000 -p 5432:5432 --name scheduling-api shekhardocker2020/single-api-db:latest
 
 ## 🧱 Architecture Overview
 
