@@ -28,10 +28,11 @@
  * Usage Example:
  * const payload = new SchedulingGroupBuilder()
  *   .withGroupName('Test Group')
- *   .withStatus(SchedulingGroupRequestStatusEnum.ACTIVE)
+ *   .withArea('Area-A')
+ *   .withStatus(CreateSchedulingGroupRequestStatusEnum.Active)
  *   .build();
  */
-import { CreateSchedulingGroupRequest } from '@generated/models';
+import { CreateSchedulingGroupRequest, CreateSchedulingGroupRequestStatusEnum } from '@generated/models';
 export class SchedulingGroupBuilder {
   private payload: CreateSchedulingGroupRequest;
 
@@ -39,7 +40,10 @@ export class SchedulingGroupBuilder {
     this.payload = {
       groupName: '',
       createdBy: 'automation',
-      status: 'Active'
+      status: CreateSchedulingGroupRequestStatusEnum.Active,
+      area: '',
+      notes: '',
+      allocationsMenu: 'false'
     };
   }
 
@@ -55,14 +59,32 @@ export class SchedulingGroupBuilder {
     return this;
   }
 
-  withStatus(status: string) {
+  withStatus(status: CreateSchedulingGroupRequestStatusEnum) {
     this.payload.status = status;
+    return this;
+  }
+
+  withArea(area: string) {
+    this.payload.area = area;
+    return this;
+  }
+
+  withNotes(notes: string) {
+    this.payload.notes = notes;
+    return this;
+  }
+
+  withAllocationsMenu(allocationsMenu: string) {
+    this.payload.allocationsMenu = allocationsMenu;
     return this;
   }
 
   build(): CreateSchedulingGroupRequest {
     if (!this.payload.groupName) {
       throw new Error('groupName is mandatory');
+    }
+    if (!this.payload.area) {
+      throw new Error('area is mandatory');
     }
     return this.payload;
   }

@@ -23,9 +23,12 @@
   // - Module Resolution: Node.js style imports
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
 
     "baseUrl": ".",
     "paths": {
@@ -38,11 +41,29 @@
       "@templates/*": ["payloads/templates/*"],
       "@utils/*": ["utils/*"],
       "@generated/*": ["src/generated/*"],
-      "@clients/*":["clients/*"]
+      "@clients/*":["clients/*"],
+      "@fixtures/*": ["fixtures/*"]
     },
 
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "tests/**/*",
+    "fixtures/**/*",
+    "clients/**/*",
+    "config/**/*",
+    "constants/**/*",
+    "db/**/*",
+    "payloads/**/*",
+    "utils/**/*",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "test-results",
+    ".playwright"
+  ]
 }

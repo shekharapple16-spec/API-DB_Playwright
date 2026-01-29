@@ -26,6 +26,9 @@
 export const ENDPOINTS = {
   SCHD_CREATE_GROUP: '/scheduling-groups',
   SCHD_GET_GROUPS: '/scheduling-groups',
+  SCHD_GET_GROUP_BY_ID: '/scheduling-groups/:id',
+  SCHD_UPDATE_GROUP: '/scheduling-groups/:id',
   SCHD_DELETE_GROUP: '/scheduling-groups/:id',
-  SCHD_DELETE_GROUPS_BY_STATUS: '/scheduling-groups/status/:status'
+  SCHD_DELETE_GROUPS_BY_STATUS: '/scheduling-groups/status/:status',
+  SCHD_GET_GROUP_HISTORY: '/scheduling-groups/:id/history'
 };

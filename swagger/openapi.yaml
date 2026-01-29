@@ -36,6 +36,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "500": {
+            "description": "Database error"
           }
         }
       },
@@ -62,6 +68,87 @@
       }
     },
     "/scheduling-groups/{id}": {
+      "get": {
+        "summary": "Fetch a scheduling group by ID",
+        "tags": [
+          "Scheduling Groups"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scheduling group found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingGroup"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "500": {
+            "description": "Database error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a scheduling group",
+        "tags": [
+          "Scheduling Groups"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSchedulingGroupRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SchedulingGroup"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "500": {
+            "description": "Database error"
+          }
+        }
+      },
       "delete": {
         "summary": "Delete scheduling group by ID",
         "tags": [
@@ -90,6 +177,48 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "500": {
+            "description": "Database error"
+          }
+        }
+      }
+    },
+    "/scheduling-groups/{id}/history": {
+      "get": {
+        "summary": "Get audit history for a scheduling group",
+        "tags": [
+          "Scheduling Groups"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Audit history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditEntry"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "500": {
+            "description": "Database error"
           }
         }
       }
@@ -106,7 +235,11 @@
             "name": "status",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "INACTIVE"
+              ]
             }
           }
         ],
@@ -120,6 +253,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "Database error"
           }
         }
       }
@@ -140,7 +276,35 @@
             "type": "string"
           },
           "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "area": {
             "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "allocations_menu": {
+            "type": "string"
+          },
+          "last_amended_by": {
+            "type": "string"
+          },
+          "last_amended_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -159,7 +323,71 @@
             "type": "string"
           },
           "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "area": {
             "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "allocationsMenu": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateSchedulingGroupRequest": {
+        "type": "object",
+        "properties": {
+          "groupName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE"
+            ]
+          },
+          "area": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "allocationsMenu": {
+            "type": "string"
+          }
+        }
+      },
+      "AuditEntry": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "group_id": {
+            "type": "integer"
+          },
+          "action": {
+            "type": "string"
+          },
+          "changed_by": {
+            "type": "string"
+          },
+          "changed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "old_values": {
+            "type": "object"
+          },
+          "new_values": {
+            "type": "object"
           }
         }
       },

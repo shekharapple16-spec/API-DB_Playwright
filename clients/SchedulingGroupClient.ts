@@ -26,7 +26,7 @@
  */
 import { BaseApiClient } from "./BaseApiClient";
 import { ENDPOINTS } from "@constants/endpoint";
-import { CreateSchedulingGroupRequest, SchedulingGroup, DeleteByIdResponse, DeleteByStatusResponse, CreateSchedulingGroupRequestFromJSON, SchedulingGroupFromJSON, DeleteByIdResponseFromJSON, DeleteByStatusResponseFromJSON } from "@generated/models";
+import { CreateSchedulingGroupRequest, UpdateSchedulingGroupRequest, SchedulingGroup, AuditEntry, DeleteByIdResponse, DeleteByStatusResponse, CreateSchedulingGroupRequestFromJSON, SchedulingGroupFromJSON, UpdateSchedulingGroupRequestFromJSON, AuditEntryFromJSON, DeleteByIdResponseFromJSON, DeleteByStatusResponseFromJSON } from "@generated/models";
 
 export class SchedulingGroupClient extends BaseApiClient {
 
@@ -75,5 +75,52 @@ export class SchedulingGroupClient extends BaseApiClient {
 
     const json = await response.json();
     return DeleteByStatusResponseFromJSON(json);
+  }
+
+  async getGroupById(id: number): Promise<SchedulingGroup> {
+    const url = ENDPOINTS.SCHD_GET_GROUP_BY_ID.replace(':id', id.toString());
+    const response = await this.request.get(url);
+
+    if (!response.ok()) {
+      throw new Error(`Get group by ID failed: ${response.status()}`);
+    }
+
+    const json = await response.json();
+    return SchedulingGroupFromJSON(json);
+  }
+
+  async updateGroup(id: number, payload: UpdateSchedulingGroupRequest): Promise<SchedulingGroup> {
+    const url = ENDPOINTS.SCHD_UPDATE_GROUP.replace(':id', id.toString());
+    const response = await this.request.put(url, { data: payload });
+
+    if (!response.ok()) {
+      throw new Error(`Update group failed: ${response.status()}`);
+    }
+
+    const json = await response.json();
+    return SchedulingGroupFromJSON(json);
+  }
+
+  async getGroupHistory(id: number): Promise<AuditEntry[]> {
+    const url = ENDPOINTS.SCHD_GET_GROUP_HISTORY.replace(':id', id.toString());
+    const response = await this.request.get(url);
+
+    if (!response.ok()) {
+      throw new Error(`Get group history failed: ${response.status()}`);
+    }
+
+    const json = await response.json();
+    return (json as any[]).map(AuditEntryFromJSON);
+  }
+
+  async getGroupsByArea(area: string): Promise<SchedulingGroup[]> {
+    const response = await this.request.get(`${ENDPOINTS.SCHD_GET_GROUPS}?area=${encodeURIComponent(area)}`);
+
+    if (!response.ok()) {
+      throw new Error(`Get groups by area failed: ${response.status()}`);
+    }
+
+    const json = await response.json();
+    return (json as any[]).map(SchedulingGroupFromJSON);
   }
 }

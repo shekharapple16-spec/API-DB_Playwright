@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "generate:scheduling": "openapi-generator-cli generate -i swagger/openapi.yaml -g typescript-fetch -o src/generated --skip-validate-spec",
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:db": "ts-node test-db-connection.ts",
+    "compare:db": "ts-node compare-db-connections.ts",
+    "migrate:add-columns": "ts-node migrate-add-columns.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +20,7 @@
     "@types/node": "^25.0.9",
     "@types/pg": "^8.16.0",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {

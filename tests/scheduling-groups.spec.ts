@@ -31,42 +31,84 @@
  * - Database data persistence
  * - API-to-database data consistency
  */
-import { test, expect } from "@playwright/test";
+import { test, expect } from "fixtures/database";
+import { APIRequestContext } from "@playwright/test";
 import { SchedulingGroupBuilder } from "@builders/SchedulingGroupBuilder";
+//import { UpdateSchedulingGroupBuilder } from "@builders/UpdateSchedulingGroupBuilder";
 import { DB_QUERIES } from "@db/queries";
 import { SchedulingGroupClient } from "@clients/SchedulingGroupClient";
 import { queryDB } from "@utils/dbClient";
+import {
+  CreateSchedulingGroupRequestStatusEnum,
+  UpdateSchedulingGroupRequestStatusEnum,
+} from "@generated/models";
+// import { logCreate, logUpdate, logDelete, getAuditHistory } from "@utils/auditHelper";
 
-// craete a test to get all groups
-
-// craete a new SchedulingGroupClient and pass request and use getAllGroups
-test("Get all scheduling groups", async ({ request }) => {
-  //add a new entry with status Inactive to the database for testing
-
-  const builder = new SchedulingGroupBuilder();
-  const payload = builder
-    .withGroupName(`TSCAUto1_${Date.now()}`)
-    .withStatus("active")
-    .build();
+test("NP035.03: Create Scheduling Group with optional fields (area, notes, allocationsMenu)", async ({
+  request,
+  dbReady,
+}: {
+  request: APIRequestContext;
+  dbReady: void;
+}) => {
   const client = new SchedulingGroupClient(request);
+  const now = Date.now();
 
-  const createdGroup = await client.createGroup(payload);
+  try {
+    // Arrange: Build payload with optional fields
+    const testGroupName = `OptionalFields_Group_${now}`;
+    const testArea = "Area-North";
+    const testNotes = "This is a test group with all optional fields populated";
+    const testAllocationsMenu = "true";
 
-  // if group created successfuly it shoud return id
-  expect(createdGroup.id).toBeDefined();
-  console.log(createdGroup);
+    const payload = new SchedulingGroupBuilder()
+      .withGroupName(testGroupName)
+      .withArea(testArea)
+      .withNotes(testNotes)
+      .withAllocationsMenu(testAllocationsMenu)
+      .withStatus(CreateSchedulingGroupRequestStatusEnum.Active)
+      .build();
 
-  // // now verify same in db
-  const dbGroups = await queryDB(DB_QUERIES.GET_GROUP_BY_ID, [createdGroup.id]);
-  expect(dbGroups.length).toBe(1);
-  console.log("DB Group:", dbGroups[0]);
+    console.log("📝 Request Payload:", JSON.stringify(payload, null, 2));
 
-//dekete whatever crarted by POSt and saved in db
-  const deleteResponse = await client.deleteGroup(createdGroup.id!);
-  console.log("Delete Response:", deleteResponse);
+    // Act: Create the group via API
+    const apiResponse = await client.createGroup(payload);
 
-  //check dleted post is wrkbg fine as data shoud not be avaible in db as well
-  const dbGroupsDeleted = await queryDB(DB_QUERIES.GET_GROUP_BY_ID, [createdGroup.id]);
-  expect(dbGroupsDeleted.length).toBe(0);
+    //console apiResponse creted Id
+    console.log("📥 API Response:", JSON.stringify(apiResponse, null, 2));
+    console.log("🔍 API Response ID:", apiResponse.id);
+    console.log("🔍 API Response Type:", typeof apiResponse.id);
 
+    // Verify ID exists
+    console.log("🔍 Checking apiResponse structure:", Object.keys(apiResponse));
+    console.log("🔍 Full apiResponse:", apiResponse);
+    
+    expect(apiResponse.id).toBeDefined();
+    expect(apiResponse.id).toBeGreaterThan(0);
+
+    // Wait for transaction to commit (database consistency delay)
+    console.log("⏳ Waiting 1000ms for database transaction to commit...");
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Validate in database - Debug query
+    console.log("📡 Executing query with ID:", apiResponse.id);
+    console.log("📡 Query:", DB_QUERIES.GET_GROUP_BY_ID);
+    const dbResults = await queryDB<any>(DB_QUERIES.GET_GROUP_BY_ID, [apiResponse.id]);
+    console.log("📊 DB Query Result:", dbResults);
+    console.log("📊 DB Results Length:", dbResults.length);
+
+    // Get ALL records to debug
+    const allRecords = await queryDB<any>(DB_QUERIES.GET_ALL_GROUPS);
+    console.log("📊 ALL Records in DB:", allRecords.length);
+    console.log("📊 Latest 5 records:", allRecords.slice(0, 5).map(r => ({ id: r.id, group_name: r.group_name })));
+
+    // Assert database result
+    expect(dbResults.length).toBeGreaterThan(0);
+    expect(dbResults[0].group_name).toBe(testGroupName);
+    console.log("✅ Test passed - record found in database");
+    
+  } catch (error) {
+    console.error("❌ Test failed:", error);
+    throw error;
+  }
 });
